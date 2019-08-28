@@ -84,6 +84,7 @@
             this.btnMoveToInProcess.TabIndex = 3;
             this.btnMoveToInProcess.Text = ">>";
             this.btnMoveToInProcess.UseVisualStyleBackColor = true;
+            this.btnMoveToInProcess.Click += new System.EventHandler(this.btnMoveToInProcess_Click);
             // 
             // btnMoveToDone
             // 
@@ -93,6 +94,7 @@
             this.btnMoveToDone.TabIndex = 4;
             this.btnMoveToDone.Text = ">>";
             this.btnMoveToDone.UseVisualStyleBackColor = true;
+            this.btnMoveToDone.Click += new System.EventHandler(this.btnMoveToDone_Click);
             // 
             // btnReturnToTasksInProcess
             // 
@@ -102,6 +104,7 @@
             this.btnReturnToTasksInProcess.TabIndex = 5;
             this.btnReturnToTasksInProcess.Text = "<<";
             this.btnReturnToTasksInProcess.UseVisualStyleBackColor = true;
+            this.btnReturnToTasksInProcess.Click += new System.EventHandler(this.btnReturnToTasksInProcess_Click);
             // 
             // btnReturnToNewTasks
             // 
@@ -111,6 +114,7 @@
             this.btnReturnToNewTasks.TabIndex = 6;
             this.btnReturnToNewTasks.Text = "<<";
             this.btnReturnToNewTasks.UseVisualStyleBackColor = true;
+            this.btnReturnToNewTasks.Click += new System.EventHandler(this.btnReturnToNewTasks_Click);
             // 
             // btnAddNewTask
             // 
@@ -120,6 +124,7 @@
             this.btnAddNewTask.TabIndex = 7;
             this.btnAddNewTask.Text = "Add";
             this.btnAddNewTask.UseVisualStyleBackColor = true;
+            this.btnAddNewTask.Click += new System.EventHandler(this.BtnAddNewTask_Click);
             // 
             // btnDeleteFromNewTasks
             // 
@@ -129,6 +134,7 @@
             this.btnDeleteFromNewTasks.TabIndex = 8;
             this.btnDeleteFromNewTasks.Text = "Delete";
             this.btnDeleteFromNewTasks.UseVisualStyleBackColor = true;
+            this.btnDeleteFromNewTasks.Click += new System.EventHandler(this.btnDeleteFromNewTasks_Click);
             // 
             // btnDeleteFromInProcess
             // 
@@ -138,6 +144,7 @@
             this.btnDeleteFromInProcess.TabIndex = 9;
             this.btnDeleteFromInProcess.Text = "Delete";
             this.btnDeleteFromInProcess.UseVisualStyleBackColor = true;
+            this.btnDeleteFromInProcess.Click += new System.EventHandler(this.btnDeleteFromInProcess_Click);
             // 
             // btnDeleteFromTasksDone
             // 
@@ -147,6 +154,7 @@
             this.btnDeleteFromTasksDone.TabIndex = 10;
             this.btnDeleteFromTasksDone.Text = "Delete";
             this.btnDeleteFromTasksDone.UseVisualStyleBackColor = true;
+            this.btnDeleteFromTasksDone.Click += new System.EventHandler(this.BtnDeleteFromTasksDone_Click);
             // 
             // lblNewTask
             // 
@@ -181,8 +189,9 @@
             this.btnCloseForm.Name = "btnCloseForm";
             this.btnCloseForm.Size = new System.Drawing.Size(66, 23);
             this.btnCloseForm.TabIndex = 14;
-            this.btnCloseForm.Text = "button9";
+            this.btnCloseForm.Text = "Close";
             this.btnCloseForm.UseVisualStyleBackColor = true;
+            this.btnCloseForm.Click += new System.EventHandler(this.BtnCloseForm_Click);
             // 
             // MyTaskTracker
             // 
