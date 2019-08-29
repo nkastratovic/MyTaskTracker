@@ -29,7 +29,7 @@ namespace MyTaskTrackerUI
 
         private void SetUpData()
         {
-            user.Tasks = OpUser.Select();
+            user.Tasks = OpTask.SelectAll();
             user.Id = 1;
         }
 
