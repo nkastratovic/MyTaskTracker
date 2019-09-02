@@ -29,7 +29,7 @@ namespace MyTaskTrackerUI
 
         private void SetUpData()
         {
-            user.Tasks = OpTask.SelectAll();
+            user.Tasks = OpTask.SelectAllTasks();
             user.Id = 1;
         }
 
@@ -51,7 +51,6 @@ namespace MyTaskTrackerUI
             RefreshLstNewTasks();
             RefreshLstTasksInProcess();
         }
-
 
         private void btnReturnToNewTasks_Click(object sender, System.EventArgs e)
         {
@@ -250,6 +249,25 @@ namespace MyTaskTrackerUI
             {
                 return false;
             }
+        }
+
+        private void Label1_Click(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void LblNewTask_Click(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void LstNewTasks_Click(object sender, System.EventArgs e)
+        {
+            Task selectedTask = (Task)lstNewTasks.SelectedItem;
+            selectedTask = OpTask.SelectTask((int)selectedTask.Id);
+            txtTaskId.Text = selectedTask.Id.ToString();
+            txtName.Text = selectedTask.Title.ToString();
+            txtDescription.Text = selectedTask.Description.ToString();
         }
     }
 }

@@ -8,9 +8,11 @@ namespace DAL.Operators
 {
     public class OpTask
     {
-        public static List<Task> SelectAll()
+        static List<Task> tasks = new List<Task>();
+        static Task task = new Task();
+        public static List<Task> SelectAllTasks()
         {
-            List<Task> tasks = new List<Task>();
+            tasks = new List<Task>();
 
             //Retrieving data using SqlDataReader
             //string connectionString = ConfigurationManager.ConnectionStrings["mttConnectionString"].ConnectionString.ToString();
@@ -43,23 +45,41 @@ namespace DAL.Operators
                 da.Fill(ds, "Tasks");
                 foreach (DataRow dr in ds.Tables["Tasks"].Rows)
                 {
-                    Task t = new Task();
+                    task = new Task();
                     // get the results of each column
-                    t.Id = (int)dr["Id"];
-                    t.Title = dr["Title"].ToString().Trim();
-                    t.Status = (int)dr["Status"];
-                    t.Deleted = (int)dr["Deleted"];
-                    t.UserId = (int)dr["UserId"];
-                    tasks.Add(t);
+                    task.Id = (int)dr["Id"];
+                    task.Title = dr["Title"].ToString().Trim();
+                    task.Status = (int)dr["Status"];
+                    task.Deleted = (int)dr["Deleted"];
+                    task.UserId = (int)dr["UserId"];
+                    tasks.Add(task);
                 }
             }
 
             return tasks;
         }
 
-        public void Select()
+        public static Task SelectTask(int id)
         {
-
+            string connectionString = ConfigurationManager.ConnectionStrings["mttConnectionString"].ConnectionString.ToString();
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                SqlDataAdapter da = new SqlDataAdapter("Select * from tblTask where Id = " + id, sqlConnection);
+                DataSet ds = new DataSet();
+                da.Fill(ds, "TaskTable");
+                if(ds.Tables["TaskTable"].Rows.Count == 1)
+                {
+                    task = new Task();
+                    // get the results of each column
+                    task.Id = (int)ds.Tables["TaskTable"].Rows[0]["Id"];
+                    task.Title = ds.Tables["TaskTable"].Rows[0]["Title"].ToString().Trim();
+                    task.Description = ds.Tables["TaskTable"].Rows[0]["Description"].ToString().Trim();
+                    task.Status = (int)ds.Tables["TaskTable"].Rows[0]["Status"];
+                    task.Deleted = (int)ds.Tables["TaskTable"].Rows[0]["Deleted"];
+                    task.UserId = (int)ds.Tables["TaskTable"].Rows[0]["UserId"];
+                }
+            }
+            return task;
         }
 
         public void Insert()
