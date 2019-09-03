@@ -10,7 +10,7 @@ namespace DAL.Operators
     {
         static List<Task> tasks = new List<Task>();
         static Task task = new Task();
-        public static List<Task> SelectAllTasks()
+        public static List<Task> SelectAll()
         {
             tasks = new List<Task>();
 
@@ -40,7 +40,7 @@ namespace DAL.Operators
             string connectionString = ConfigurationManager.ConnectionStrings["mttConnectionString"].ConnectionString.ToString();
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
-                SqlDataAdapter da = new SqlDataAdapter("Select * from tblTask", sqlConnection);
+                SqlDataAdapter da = new SqlDataAdapter("Select * from tblTask Where Deleted = 0", sqlConnection);
                 DataSet ds = new DataSet();
                 da.Fill(ds, "Tasks");
                 foreach (DataRow dr in ds.Tables["Tasks"].Rows)
@@ -59,7 +59,7 @@ namespace DAL.Operators
             return tasks;
         }
 
-        public static Task SelectTask(int id)
+        public static Task Select(int id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["mttConnectionString"].ConnectionString.ToString();
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
@@ -67,6 +67,7 @@ namespace DAL.Operators
                 SqlDataAdapter da = new SqlDataAdapter("Select * from tblTask where Id = " + id, sqlConnection);
                 DataSet ds = new DataSet();
                 da.Fill(ds, "TaskTable");
+
                 if(ds.Tables["TaskTable"].Rows.Count == 1)
                 {
                     task = new Task();
@@ -82,19 +83,63 @@ namespace DAL.Operators
             return task;
         }
 
-        public void Insert()
+        public static void Insert(string title, string description, int Status, int userId)
         {
+            string connectionString = ConfigurationManager.ConnectionStrings["mttConnectionString"].ConnectionString.ToString();
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                string query = "INSERT INTO dbo.tblTask (Title,Description,Status,Deleted,UserId) VALUES (@Title,@Description,@Status,@Deleted,@UserId)";
 
+                using (SqlCommand command = new SqlCommand(query, sqlConnection))
+                {
+                    command.Parameters.AddWithValue("@Title", title);
+                    command.Parameters.AddWithValue("@Description", description);
+                    command.Parameters.AddWithValue("@Status", Status);
+                    command.Parameters.AddWithValue("@Deleted", 0);
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    sqlConnection.Open();
+                    int result = command.ExecuteNonQuery();
+                }
+            }
         }
 
-        public void Update()
+        public static void Update(int id, string title, string description, int status)
         {
+            string connectionString = ConfigurationManager.ConnectionStrings["mttConnectionString"].ConnectionString.ToString();
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                string query = "UPDATE dbo.tblTask SET Title = @title, Description = @description, Status = @status WHERE Id = @id";
 
+                using (SqlCommand command = new SqlCommand(query, sqlConnection))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+                    command.Parameters.AddWithValue("@title", title);
+                    command.Parameters.AddWithValue("@description", description);
+                    command.Parameters.AddWithValue("@status", status);
+
+                    sqlConnection.Open();
+                    int result = command.ExecuteNonQuery();
+                }
+            }
         }
 
-        public void Delete()
+        public static void Delete(int id)
         {
+            string connectionString = ConfigurationManager.ConnectionStrings["mttConnectionString"].ConnectionString.ToString();
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                string query = "UPDATE dbo.tblTask SET Deleted = @deleted WHERE Id = @id";
 
+                using (SqlCommand command = new SqlCommand(query, sqlConnection))
+                {
+                    command.Parameters.AddWithValue("@deleted", 1);
+                    command.Parameters.AddWithValue("@id", id);
+
+                    sqlConnection.Open();
+                    int result = command.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

@@ -37,19 +37,22 @@
             this.btnReturnToTasksInProcess = new System.Windows.Forms.Button();
             this.btnReturnToNewTasks = new System.Windows.Forms.Button();
             this.btnAddNewTask = new System.Windows.Forms.Button();
-            this.btnDeleteFromNewTasks = new System.Windows.Forms.Button();
-            this.btnDeleteFromInProcess = new System.Windows.Forms.Button();
-            this.btnDeleteFromTasksDone = new System.Windows.Forms.Button();
             this.lblNewTask = new System.Windows.Forms.Label();
             this.lblTaskInProcess = new System.Windows.Forms.Label();
             this.lblTaskDone = new System.Windows.Forms.Label();
             this.btnCloseForm = new System.Windows.Forms.Button();
             this.txtTaskId = new System.Windows.Forms.TextBox();
-            this.txtDescription = new System.Windows.Forms.TextBox();
-            this.txtName = new System.Windows.Forms.TextBox();
+            this.txtTaskDescription = new System.Windows.Forms.TextBox();
+            this.txtTaskTitle = new System.Windows.Forms.TextBox();
             this.lblTaskId = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
             this.lblDescription = new System.Windows.Forms.Label();
+            this.btnTaskUpdate = new System.Windows.Forms.Button();
+            this.lblStatus = new System.Windows.Forms.Label();
+            this.txtTaskStatus = new System.Windows.Forms.TextBox();
+            this.txtTaskDelete = new System.Windows.Forms.Button();
+            this.lblTaskMastHaveName = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,6 +77,8 @@
             this.lstTasksInProcess.Name = "lstTasksInProcess";
             this.lstTasksInProcess.Size = new System.Drawing.Size(210, 212);
             this.lstTasksInProcess.TabIndex = 1;
+            this.lstTasksInProcess.Click += new System.EventHandler(this.LstTasksInProcess_Click);
+            this.lstTasksInProcess.SelectedIndexChanged += new System.EventHandler(this.LstTasksInProcess_SelectedIndexChanged);
             // 
             // lstTasksDone
             // 
@@ -82,6 +87,8 @@
             this.lstTasksDone.Name = "lstTasksDone";
             this.lstTasksDone.Size = new System.Drawing.Size(210, 212);
             this.lstTasksDone.TabIndex = 2;
+            this.lstTasksDone.Click += new System.EventHandler(this.LstTasksDone_Click);
+            this.lstTasksDone.SelectedIndexChanged += new System.EventHandler(this.LstTasksDone_SelectedIndexChanged);
             // 
             // btnMoveToInProcess
             // 
@@ -133,36 +140,6 @@
             this.btnAddNewTask.UseVisualStyleBackColor = true;
             this.btnAddNewTask.Click += new System.EventHandler(this.BtnAddNewTask_Click);
             // 
-            // btnDeleteFromNewTasks
-            // 
-            this.btnDeleteFromNewTasks.Location = new System.Drawing.Point(218, 429);
-            this.btnDeleteFromNewTasks.Name = "btnDeleteFromNewTasks";
-            this.btnDeleteFromNewTasks.Size = new System.Drawing.Size(66, 23);
-            this.btnDeleteFromNewTasks.TabIndex = 8;
-            this.btnDeleteFromNewTasks.Text = "Delete";
-            this.btnDeleteFromNewTasks.UseVisualStyleBackColor = true;
-            this.btnDeleteFromNewTasks.Click += new System.EventHandler(this.btnDeleteFromNewTasks_Click);
-            // 
-            // btnDeleteFromInProcess
-            // 
-            this.btnDeleteFromInProcess.Location = new System.Drawing.Point(444, 273);
-            this.btnDeleteFromInProcess.Name = "btnDeleteFromInProcess";
-            this.btnDeleteFromInProcess.Size = new System.Drawing.Size(66, 23);
-            this.btnDeleteFromInProcess.TabIndex = 9;
-            this.btnDeleteFromInProcess.Text = "Delete";
-            this.btnDeleteFromInProcess.UseVisualStyleBackColor = true;
-            this.btnDeleteFromInProcess.Click += new System.EventHandler(this.btnDeleteFromInProcess_Click);
-            // 
-            // btnDeleteFromTasksDone
-            // 
-            this.btnDeleteFromTasksDone.Location = new System.Drawing.Point(735, 273);
-            this.btnDeleteFromTasksDone.Name = "btnDeleteFromTasksDone";
-            this.btnDeleteFromTasksDone.Size = new System.Drawing.Size(66, 23);
-            this.btnDeleteFromTasksDone.TabIndex = 10;
-            this.btnDeleteFromTasksDone.Text = "Delete";
-            this.btnDeleteFromTasksDone.UseVisualStyleBackColor = true;
-            this.btnDeleteFromTasksDone.Click += new System.EventHandler(this.BtnDeleteFromTasksDone_Click);
-            // 
             // lblNewTask
             // 
             this.lblNewTask.AutoSize = true;
@@ -193,7 +170,7 @@
             // 
             // btnCloseForm
             // 
-            this.btnCloseForm.Location = new System.Drawing.Point(735, 330);
+            this.btnCloseForm.Location = new System.Drawing.Point(735, 429);
             this.btnCloseForm.Name = "btnCloseForm";
             this.btnCloseForm.Size = new System.Drawing.Size(66, 23);
             this.btnCloseForm.TabIndex = 14;
@@ -207,21 +184,22 @@
             this.txtTaskId.Name = "txtTaskId";
             this.txtTaskId.Size = new System.Drawing.Size(40, 20);
             this.txtTaskId.TabIndex = 15;
+            this.txtTaskId.Visible = false;
             // 
-            // txtDescription
+            // txtTaskDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(75, 330);
-            this.txtDescription.Multiline = true;
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(209, 93);
-            this.txtDescription.TabIndex = 16;
+            this.txtTaskDescription.Location = new System.Drawing.Point(75, 330);
+            this.txtTaskDescription.Multiline = true;
+            this.txtTaskDescription.Name = "txtTaskDescription";
+            this.txtTaskDescription.Size = new System.Drawing.Size(209, 93);
+            this.txtTaskDescription.TabIndex = 16;
             // 
-            // txtName
+            // txtTaskTitle
             // 
-            this.txtName.Location = new System.Drawing.Point(74, 293);
-            this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(210, 20);
-            this.txtName.TabIndex = 17;
+            this.txtTaskTitle.Location = new System.Drawing.Point(74, 293);
+            this.txtTaskTitle.Name = "txtTaskTitle";
+            this.txtTaskTitle.Size = new System.Drawing.Size(210, 20);
+            this.txtTaskTitle.TabIndex = 17;
             // 
             // lblTaskId
             // 
@@ -231,6 +209,7 @@
             this.lblTaskId.Size = new System.Drawing.Size(19, 13);
             this.lblTaskId.TabIndex = 18;
             this.lblTaskId.Text = "Id:";
+            this.lblTaskId.Visible = false;
             this.lblTaskId.Click += new System.EventHandler(this.Label1_Click);
             // 
             // lblName
@@ -251,24 +230,84 @@
             this.lblDescription.TabIndex = 20;
             this.lblDescription.Text = "Description:";
             // 
+            // btnTaskUpdate
+            // 
+            this.btnTaskUpdate.Location = new System.Drawing.Point(146, 429);
+            this.btnTaskUpdate.Name = "btnTaskUpdate";
+            this.btnTaskUpdate.Size = new System.Drawing.Size(66, 23);
+            this.btnTaskUpdate.TabIndex = 21;
+            this.btnTaskUpdate.Text = "Update";
+            this.btnTaskUpdate.UseVisualStyleBackColor = true;
+            this.btnTaskUpdate.Click += new System.EventHandler(this.BtnTaskUpdate_Click);
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Location = new System.Drawing.Point(179, 262);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(40, 13);
+            this.lblStatus.TabIndex = 23;
+            this.lblStatus.Text = "Status:";
+            this.lblStatus.Visible = false;
+            // 
+            // txtTaskStatus
+            // 
+            this.txtTaskStatus.Location = new System.Drawing.Point(244, 259);
+            this.txtTaskStatus.Name = "txtTaskStatus";
+            this.txtTaskStatus.Size = new System.Drawing.Size(40, 20);
+            this.txtTaskStatus.TabIndex = 22;
+            this.txtTaskStatus.Visible = false;
+            // 
+            // txtTaskDelete
+            // 
+            this.txtTaskDelete.Location = new System.Drawing.Point(218, 429);
+            this.txtTaskDelete.Name = "txtTaskDelete";
+            this.txtTaskDelete.Size = new System.Drawing.Size(66, 23);
+            this.txtTaskDelete.TabIndex = 24;
+            this.txtTaskDelete.Text = "Delete";
+            this.txtTaskDelete.UseVisualStyleBackColor = true;
+            this.txtTaskDelete.Click += new System.EventHandler(this.TxtTaskDelete_Click);
+            // 
+            // lblTaskMastHaveName
+            // 
+            this.lblTaskMastHaveName.AutoSize = true;
+            this.lblTaskMastHaveName.ForeColor = System.Drawing.Color.Red;
+            this.lblTaskMastHaveName.Location = new System.Drawing.Point(290, 296);
+            this.lblTaskMastHaveName.Name = "lblTaskMastHaveName";
+            this.lblTaskMastHaveName.Size = new System.Drawing.Size(115, 13);
+            this.lblTaskMastHaveName.TabIndex = 25;
+            this.lblTaskMastHaveName.Text = "Task mast have name!";
+            this.lblTaskMastHaveName.Visible = false;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Location = new System.Drawing.Point(5, 243);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(400, 215);
+            this.groupBox1.TabIndex = 26;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Add new task";
+            // 
             // MyTaskTracker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(816, 464);
+            this.Controls.Add(this.lblTaskMastHaveName);
+            this.Controls.Add(this.txtTaskDelete);
+            this.Controls.Add(this.lblStatus);
+            this.Controls.Add(this.txtTaskStatus);
+            this.Controls.Add(this.btnTaskUpdate);
             this.Controls.Add(this.lblDescription);
             this.Controls.Add(this.lblName);
             this.Controls.Add(this.lblTaskId);
-            this.Controls.Add(this.txtName);
-            this.Controls.Add(this.txtDescription);
+            this.Controls.Add(this.txtTaskTitle);
+            this.Controls.Add(this.txtTaskDescription);
             this.Controls.Add(this.txtTaskId);
             this.Controls.Add(this.btnCloseForm);
             this.Controls.Add(this.lblTaskDone);
             this.Controls.Add(this.lblTaskInProcess);
             this.Controls.Add(this.lblNewTask);
-            this.Controls.Add(this.btnDeleteFromTasksDone);
-            this.Controls.Add(this.btnDeleteFromInProcess);
-            this.Controls.Add(this.btnDeleteFromNewTasks);
             this.Controls.Add(this.btnAddNewTask);
             this.Controls.Add(this.btnReturnToNewTasks);
             this.Controls.Add(this.btnReturnToTasksInProcess);
@@ -277,6 +316,7 @@
             this.Controls.Add(this.lstTasksDone);
             this.Controls.Add(this.lstTasksInProcess);
             this.Controls.Add(this.lstNewTasks);
+            this.Controls.Add(this.groupBox1);
             this.Name = "MyTaskTracker";
             this.Text = "MyTaskTracker";
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
@@ -292,9 +332,6 @@
         private System.Windows.Forms.Label lblTaskDone;
         private System.Windows.Forms.Label lblTaskInProcess;
         private System.Windows.Forms.Label lblNewTask;
-        private System.Windows.Forms.Button btnDeleteFromTasksDone;
-        private System.Windows.Forms.Button btnDeleteFromInProcess;
-        private System.Windows.Forms.Button btnDeleteFromNewTasks;
         private System.Windows.Forms.Button btnAddNewTask;
         private System.Windows.Forms.Button btnReturnToNewTasks;
         private System.Windows.Forms.Button btnReturnToTasksInProcess;
@@ -306,9 +343,15 @@
         private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Label lblTaskId;
-        private System.Windows.Forms.TextBox txtName;
-        private System.Windows.Forms.TextBox txtDescription;
+        private System.Windows.Forms.TextBox txtTaskTitle;
+        private System.Windows.Forms.TextBox txtTaskDescription;
         private System.Windows.Forms.TextBox txtTaskId;
+        private System.Windows.Forms.Button btnTaskUpdate;
+        private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.TextBox txtTaskStatus;
+        private System.Windows.Forms.Button txtTaskDelete;
+        private System.Windows.Forms.Label lblTaskMastHaveName;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 

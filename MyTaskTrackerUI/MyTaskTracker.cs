@@ -4,12 +4,13 @@ using System.Windows.Forms;
 
 using MyTaskTrackerLibrary;
 using DAL.Operators;
+using System;
 
 namespace MyTaskTrackerUI
 {
     public partial class MyTaskTracker : Form
     {
-        private User user = new User();
+        private List<Task> tasks = new List<Task>();
         private List<Task> newTasksList = new List<Task>();
         private List<Task> tasksInProcessList = new List<Task>();
         private List<Task> tasksDoneList = new List<Task>();
@@ -29,149 +30,74 @@ namespace MyTaskTrackerUI
 
         private void SetUpData()
         {
-            user.Tasks = OpTask.SelectAllTasks();
-            user.Id = 1;
+            tasks = OpTask.SelectAll();
         }
 
         private void btnMoveToInProcess_Click(object sender, System.EventArgs e)
         {
-            Task selectedTask = (Task)lstNewTasks.SelectedItem;
-
-            if (selectedTask != null)
+            if(txtTaskStatus.Text=="1")
             {
-                foreach (Task t in user.Tasks)
-                {
-                    if (t.Id == selectedTask.Id)
-                    {
-                        t.Status = 2;
-                    }
-                } 
+                txtTaskStatus.Text = "2";
+                btnTaskUpdate.PerformClick();
+                SetUpData();
+                RefreshLstNewTasks();
+                RefreshLstTasksInProcess();
             }
-
-            RefreshLstNewTasks();
-            RefreshLstTasksInProcess();
         }
 
         private void btnReturnToNewTasks_Click(object sender, System.EventArgs e)
         {
-            Task selectedTask = (Task)lstTasksInProcess.SelectedItem;
-
-            if (selectedTask != null)
+            if (txtTaskStatus.Text == "2")
             {
-                foreach (Task t in user.Tasks)
-                {
-                    if (t.Id == selectedTask.Id)
-                    {
-                        t.Status = 1;
-                    }
-                }
+                txtTaskStatus.Text = "1";
+                btnTaskUpdate.PerformClick();
+                SetUpData();
+                RefreshLstNewTasks();
+                RefreshLstTasksInProcess();
             }
-
-            RefreshLstNewTasks();
-            RefreshLstTasksInProcess();
         }
 
         private void btnMoveToDone_Click(object sender, System.EventArgs e)
         {
-            Task selectedTask = (Task)lstTasksInProcess.SelectedItem;
-
-            if (selectedTask != null)
+            if (txtTaskStatus.Text == "2")
             {
-                foreach (Task t in user.Tasks)
-                {
-                    if (t.Id == selectedTask.Id)
-                    {
-                        t.Status = 3;
-                    }
-                }
+                txtTaskStatus.Text = "3";
+                btnTaskUpdate.PerformClick();
+                SetUpData();
+                RefreshLstTasksInProcess();
+                RefreshLstTasksDone();
             }
-
-            RefreshLstTasksInProcess();
-            RefreshLstTasksDone();
         }
 
         private void btnReturnToTasksInProcess_Click(object sender, System.EventArgs e)
         {
-            Task selectedTask = (Task)lstTasksDone.SelectedItem;
-
-            if (selectedTask != null)
+            if (txtTaskStatus.Text == "3")
             {
-                foreach (Task t in user.Tasks)
-                {
-                    if (t.Id == selectedTask.Id)
-                    {
-                        t.Status = 2;
-                    }
-                }
-            }
-
-            RefreshLstTasksInProcess();
-            RefreshLstTasksDone();
-        }
-
-        private void btnDeleteFromNewTasks_Click(object sender, System.EventArgs e)
-        {
-            Task selectedTask = (Task)lstNewTasks.SelectedItem;
-
-            if (selectedTask != null)
-            {
-                if (DeleteMessageBox())
-                {
-                    foreach (Task t in user.Tasks)
-                    {
-                        if (t.Id == selectedTask.Id)
-                        {
-                            t.Deleted = 0;
-                        }
-                    }
-                    RefreshLstNewTasks();
-                }
-            }
-        }
-
-        private void btnDeleteFromInProcess_Click(object sender, System.EventArgs e)
-        {
-            Task selectedTask = (Task)lstTasksInProcess.SelectedItem;
-
-            if (selectedTask != null)
-            {
-                if (DeleteMessageBox())
-                {
-                    foreach (Task t in user.Tasks)
-                    {
-                        if (t.Id == selectedTask.Id)
-                        {
-                            t.Deleted = 0;
-                        }
-                    }
-                    RefreshLstTasksInProcess();
-                }
-            }
-        }
-
-        private void BtnDeleteFromTasksDone_Click(object sender, System.EventArgs e)
-        {
-            Task selectedTask = (Task)lstTasksDone.SelectedItem;
-
-            if (selectedTask != null)
-            {
-                if (DeleteMessageBox())
-                {
-                    foreach (Task t in user.Tasks)
-                    {
-                        if (t.Id == selectedTask.Id)
-                        {
-                            t.Deleted = 0;
-                        }
-                    }
-                    RefreshLstTasksDone();
-                }
+                txtTaskStatus.Text = "2";
+                btnTaskUpdate.PerformClick();
+                SetUpData();
+                RefreshLstTasksInProcess();
+                RefreshLstTasksDone();
             }
         }
 
         private void BtnAddNewTask_Click(object sender, System.EventArgs e)
         {
-            //ToDo: Add new form for adding tasks
+            if (txtTaskTitle.Text == String.Empty)
+            {
+                lblTaskMastHaveName.Visible = true;
+            }
+            else
+            {
+                OpTask.Insert(txtTaskTitle.Text, txtTaskDescription.Text, 1, 1);
+                txtTaskTitle.Text = string.Empty;
+                txtTaskDescription.Text = string.Empty;
+
+                SetUpData();
+                RefreshLstNewTasks();
+                RefreshLstTasksInProcess();
+                RefreshLstTasksDone();
+            }
         }
 
         private void BtnCloseForm_Click(object sender, System.EventArgs e)
@@ -181,7 +107,7 @@ namespace MyTaskTrackerUI
 
         private void RefreshLstNewTasks()
         {
-            newTasksList = user.Tasks.Where(x => x.Status == 1 && x.Deleted == 0).ToList();
+            newTasksList = tasks.Where(x => x.Status == 1).ToList();
 
             if (newTasksList.Any())
             {
@@ -200,7 +126,7 @@ namespace MyTaskTrackerUI
         private void RefreshLstTasksInProcess()
         {
 
-            tasksInProcessList = user.Tasks.Where(x => x.Status == 2 && x.Deleted == 0).ToList();
+            tasksInProcessList = tasks.Where(x => x.Status == 2).ToList();
 
             if (tasksInProcessList.Any())
             {
@@ -219,7 +145,7 @@ namespace MyTaskTrackerUI
         private void RefreshLstTasksDone()
         {
 
-            tasksDoneList = user.Tasks.Where(x => x.Status == 3 && x.Deleted == 0).ToList();
+            tasksDoneList = tasks.Where(x => x.Status == 3).ToList();
 
             if (tasksDoneList.Any())
             {
@@ -240,8 +166,8 @@ namespace MyTaskTrackerUI
             DialogResult myResult;
 
             myResult = MessageBox.Show("Are you really delete the item?", "Delete comfirmation",
-                MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-            if (myResult == DialogResult.OK)
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (myResult == DialogResult.Yes)
             {
                 return true;
             }
@@ -264,10 +190,66 @@ namespace MyTaskTrackerUI
         private void LstNewTasks_Click(object sender, System.EventArgs e)
         {
             Task selectedTask = (Task)lstNewTasks.SelectedItem;
-            selectedTask = OpTask.SelectTask((int)selectedTask.Id);
+            selectedTask = OpTask.Select((int)selectedTask.Id);
             txtTaskId.Text = selectedTask.Id.ToString();
-            txtName.Text = selectedTask.Title.ToString();
-            txtDescription.Text = selectedTask.Description.ToString();
+            txtTaskStatus.Text = selectedTask.Status.ToString();
+            txtTaskTitle.Text = selectedTask.Title.ToString();
+            txtTaskDescription.Text = selectedTask.Description.ToString();
+        }
+
+        private void LstTasksInProcess_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void LstTasksDone_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void BtnTaskUpdate_Click(object sender, System.EventArgs e)
+        {
+            if (txtTaskId.Text != String.Empty)
+            {
+                OpTask.Update(Convert.ToInt32(txtTaskId.Text), txtTaskTitle.Text, txtTaskDescription.Text, Convert.ToInt32(txtTaskStatus.Text));
+
+                SetUpData();
+                RefreshLstNewTasks();
+                RefreshLstTasksInProcess();
+                RefreshLstTasksDone();
+            }
+        }
+
+        private void TxtTaskDelete_Click(object sender, EventArgs e)
+        {
+            if (DeleteMessageBox())
+            {
+                OpTask.Delete(Convert.ToInt32(txtTaskId.Text));
+                SetUpData();
+                RefreshLstNewTasks();
+                RefreshLstTasksInProcess();
+                RefreshLstTasksDone();
+            }
+        }
+
+        private void LstTasksInProcess_Click(object sender, EventArgs e)
+        {
+            Task selectedTask = (Task)lstTasksInProcess.SelectedItem;
+            selectedTask = OpTask.Select((int)selectedTask.Id);
+            txtTaskId.Text = selectedTask.Id.ToString();
+            txtTaskStatus.Text = selectedTask.Status.ToString();
+            txtTaskTitle.Text = selectedTask.Title.ToString();
+            txtTaskDescription.Text = selectedTask.Description.ToString();
+        }
+
+        private void LstTasksDone_Click(object sender, EventArgs e)
+        {
+            Task selectedTask = (Task)lstTasksDone.SelectedItem;
+            selectedTask = OpTask.Select((int)selectedTask.Id);
+            txtTaskId.Text = selectedTask.Id.ToString();
+            txtTaskStatus.Text = selectedTask.Status.ToString();
+            txtTaskTitle.Text = selectedTask.Title.ToString();
+            txtTaskDescription.Text = selectedTask.Description.ToString();
         }
     }
 }
