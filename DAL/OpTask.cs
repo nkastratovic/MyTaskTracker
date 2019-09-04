@@ -10,7 +10,7 @@ namespace DAL.Operators
     {
         static List<Task> tasks = new List<Task>();
         static Task task = new Task();
-        public static List<Task> SelectAll()
+        public static List<Task> Select()
         {
             tasks = new List<Task>();
 
@@ -28,7 +28,7 @@ namespace DAL.Operators
             //            // get the results of each column
             //            t.Id = (int)sdr["Id"];
             //            t.Title = sdr["Title"].ToString().Trim();
-            //            t.Status = (int)sdr["Status"];
+            //            t.StatusId = (int)sdr["StatusId"];
             //            t.Deleted = (int)sdr["Deleted"];
             //            t.UserId = (int)sdr["UserId"];
             //            tasks.Add(t);
@@ -49,7 +49,7 @@ namespace DAL.Operators
                     // get the results of each column
                     task.Id = (int)dr["Id"];
                     task.Title = dr["Title"].ToString().Trim();
-                    task.Status = (int)dr["Status"];
+                    task.StatusId = (int)dr["StatusId"];
                     task.Deleted = (int)dr["Deleted"];
                     task.UserId = (int)dr["UserId"];
                     tasks.Add(task);
@@ -75,7 +75,7 @@ namespace DAL.Operators
                     task.Id = (int)ds.Tables["TaskTable"].Rows[0]["Id"];
                     task.Title = ds.Tables["TaskTable"].Rows[0]["Title"].ToString().Trim();
                     task.Description = ds.Tables["TaskTable"].Rows[0]["Description"].ToString().Trim();
-                    task.Status = (int)ds.Tables["TaskTable"].Rows[0]["Status"];
+                    task.StatusId = (int)ds.Tables["TaskTable"].Rows[0]["StatusId"];
                     task.Deleted = (int)ds.Tables["TaskTable"].Rows[0]["Deleted"];
                     task.UserId = (int)ds.Tables["TaskTable"].Rows[0]["UserId"];
                 }
@@ -83,19 +83,17 @@ namespace DAL.Operators
             return task;
         }
 
-        public static void Insert(string title, string description, int Status, int userId)
+        public static void Insert(string title, string description, int userId)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["mttConnectionString"].ConnectionString.ToString();
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
-                string query = "INSERT INTO dbo.tblTask (Title,Description,Status,Deleted,UserId) VALUES (@Title,@Description,@Status,@Deleted,@UserId)";
+                string query = "INSERT INTO dbo.tblTask (Title,Description,UserId) VALUES (@Title,@Description,@UserId)";
 
                 using (SqlCommand command = new SqlCommand(query, sqlConnection))
                 {
                     command.Parameters.AddWithValue("@Title", title);
                     command.Parameters.AddWithValue("@Description", description);
-                    command.Parameters.AddWithValue("@Status", Status);
-                    command.Parameters.AddWithValue("@Deleted", 0);
                     command.Parameters.AddWithValue("@UserId", userId);
 
                     sqlConnection.Open();
@@ -104,19 +102,19 @@ namespace DAL.Operators
             }
         }
 
-        public static void Update(int id, string title, string description, int status)
+        public static void Update(int id, string title, string description, int statusId)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["mttConnectionString"].ConnectionString.ToString();
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
-                string query = "UPDATE dbo.tblTask SET Title = @title, Description = @description, Status = @status WHERE Id = @id";
+                string query = "UPDATE dbo.tblTask SET Title = @title, Description = @description, StatusId = @statusId WHERE Id = @id";
 
                 using (SqlCommand command = new SqlCommand(query, sqlConnection))
                 {
                     command.Parameters.AddWithValue("@id", id);
                     command.Parameters.AddWithValue("@title", title);
                     command.Parameters.AddWithValue("@description", description);
-                    command.Parameters.AddWithValue("@status", status);
+                    command.Parameters.AddWithValue("@statusId", statusId);
 
                     sqlConnection.Open();
                     int result = command.ExecuteNonQuery();

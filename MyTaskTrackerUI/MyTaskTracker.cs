@@ -30,7 +30,7 @@ namespace MyTaskTrackerUI
 
         private void SetUpData()
         {
-            tasks = OpTask.SelectAll();
+            tasks = OpTask.Select();
         }
 
         private void btnMoveToInProcess_Click(object sender, System.EventArgs e)
@@ -89,7 +89,7 @@ namespace MyTaskTrackerUI
             }
             else
             {
-                OpTask.Insert(txtTaskTitle.Text, txtTaskDescription.Text, 1, 1);
+                OpTask.Insert(txtTaskTitle.Text, txtTaskDescription.Text, 1);
                 txtTaskTitle.Text = string.Empty;
                 txtTaskDescription.Text = string.Empty;
 
@@ -107,7 +107,7 @@ namespace MyTaskTrackerUI
 
         private void RefreshLstNewTasks()
         {
-            newTasksList = tasks.Where(x => x.Status == 1).ToList();
+            newTasksList = tasks.Where(x => x.StatusId == 1).ToList();
 
             if (newTasksList.Any())
             {
@@ -126,7 +126,7 @@ namespace MyTaskTrackerUI
         private void RefreshLstTasksInProcess()
         {
 
-            tasksInProcessList = tasks.Where(x => x.Status == 2).ToList();
+            tasksInProcessList = tasks.Where(x => x.StatusId == 2).ToList();
 
             if (tasksInProcessList.Any())
             {
@@ -145,7 +145,7 @@ namespace MyTaskTrackerUI
         private void RefreshLstTasksDone()
         {
 
-            tasksDoneList = tasks.Where(x => x.Status == 3).ToList();
+            tasksDoneList = tasks.Where(x => x.StatusId == 3).ToList();
 
             if (tasksDoneList.Any())
             {
@@ -192,7 +192,7 @@ namespace MyTaskTrackerUI
             Task selectedTask = (Task)lstNewTasks.SelectedItem;
             selectedTask = OpTask.Select((int)selectedTask.Id);
             txtTaskId.Text = selectedTask.Id.ToString();
-            txtTaskStatus.Text = selectedTask.Status.ToString();
+            txtTaskStatus.Text = selectedTask.StatusId.ToString();
             txtTaskTitle.Text = selectedTask.Title.ToString();
             txtTaskDescription.Text = selectedTask.Description.ToString();
         }
@@ -237,7 +237,7 @@ namespace MyTaskTrackerUI
             Task selectedTask = (Task)lstTasksInProcess.SelectedItem;
             selectedTask = OpTask.Select((int)selectedTask.Id);
             txtTaskId.Text = selectedTask.Id.ToString();
-            txtTaskStatus.Text = selectedTask.Status.ToString();
+            txtTaskStatus.Text = selectedTask.StatusId.ToString();
             txtTaskTitle.Text = selectedTask.Title.ToString();
             txtTaskDescription.Text = selectedTask.Description.ToString();
         }
@@ -247,7 +247,7 @@ namespace MyTaskTrackerUI
             Task selectedTask = (Task)lstTasksDone.SelectedItem;
             selectedTask = OpTask.Select((int)selectedTask.Id);
             txtTaskId.Text = selectedTask.Id.ToString();
-            txtTaskStatus.Text = selectedTask.Status.ToString();
+            txtTaskStatus.Text = selectedTask.StatusId.ToString();
             txtTaskTitle.Text = selectedTask.Title.ToString();
             txtTaskDescription.Text = selectedTask.Description.ToString();
         }

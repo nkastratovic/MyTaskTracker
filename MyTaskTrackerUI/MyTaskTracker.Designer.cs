@@ -247,7 +247,7 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(40, 13);
             this.lblStatus.TabIndex = 23;
-            this.lblStatus.Text = "Status:";
+            this.lblStatus.Text = "StatusId:";
             this.lblStatus.Visible = false;
             // 
             // txtTaskStatus
